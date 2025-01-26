@@ -8,10 +8,13 @@
     <artifactId>MockingExample</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+
+
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -24,6 +27,7 @@
             <artifactId>assertj-core</artifactId>
             <version>3.27.3</version>
             <scope>test</scope>
+
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -31,6 +35,7 @@
             <version>5.15.2</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
     <build>
         <plugins>
