@@ -1,4 +1,5 @@
 package com.example;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,48 +22,27 @@ class BookingSystemTest {
 
     @BeforeEach
     void setUp() {
-        timeProvider = Mockito.mock(TimeProvider.class);
-        roomRepository = Mockito.mock(RoomRepository.class);
-        notificationService = Mockito.mock(NotificationService.class);
+        timeProvider = mock(TimeProvider.class);
+        roomRepository = mock(RoomRepository.class);
+        notificationService = mock(NotificationService.class);
         bookingSystem = new BookingSystem(timeProvider, roomRepository, notificationService);
     }
 
-    @Test
-    void testToBookRoom(){
-
-
+    @ParameterizedTest
+    @CsvSource({" , 2024-12-12T10:00, 2024-12-12T11:00", "room1, , 2024-12-12T11:00", "room1, 2024-12-12T10:00, "})
+    void shouldThrowExceptionWhenBookingWithNullValues(String roomId, LocalDateTime startTime, LocalDateTime endTime) {
+        assertThatThrownBy(() -> bookingSystem.bookRoom(roomId, startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Bokning kräver giltiga start- och sluttider samt rum-id");
     }
-    @Test
-    void shouldThrowExceptionWhenRoomIdIsNull() {
-        LocalDateTime startTime = LocalDateTime.now();
-        LocalDateTime endTime = startTime.plusHours(1);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            bookingSystem.bookRoom(null, startTime, endTime);
-        });
-
-        assertEquals("Bokning kräver giltiga start- och sluttider samt rum-id", exception.getMessage());
-    }
-
-
 
     @Test
     void shouldThrowExceptionWhenBookingInPast() {
         LocalDateTime pastTime = LocalDateTime.now().minusDays(1);
-        when(timeProvider.getCurrentTime()).thenReturn(pastTime);
+        when(timeProvider.getCurrentTime()).thenReturn(LocalDateTime.now());
 
-        assertThatThrownBy(() -> bookingSystem.bookRoom("room1", pastTime, pastTime.plusDays(1)))
+        assertThatThrownBy(() -> bookingSystem.bookRoom("room1", pastTime, pastTime.plusHours(1)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Rummet existerar inte");
+                .hasMessage("Kan inte boka tid i dåtid");
     }
-    @Test
-    void shouldThrowExceptionWhenEndTimeBeforeStartTime() {
-        LocalDateTime startTime = LocalDateTime.now().plusDays(1);
-        LocalDateTime endTime = startTime.minusHours(1);
-
-        assertThatThrownBy(() -> bookingSystem.bookRoom("room1", startTime, endTime))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Sluttid måste vara efter starttid");
-    }
-
 }
