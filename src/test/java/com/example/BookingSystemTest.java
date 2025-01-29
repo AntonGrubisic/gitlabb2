@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,6 +143,13 @@ class BookingSystemTest {
 
         assertEquals(1, result.size());
         assertEquals(availableRoom, result.get(0));
+    }
+    @Test
+    void shouldReturnFalseIfBookingDoesNotExist() {
+        when(roomRepository.findAll()).thenReturn(Collections.emptyList());
+
+        boolean result = bookingSystem.cancelBooking("nonExistentBooking");
+        assertFalse(result);
     }
 
 }
