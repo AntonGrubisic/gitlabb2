@@ -151,5 +151,20 @@ class BookingSystemTest {
         boolean result = bookingSystem.cancelBooking("nonExistentBooking");
         assertFalse(result);
     }
+    @Test
+    void shouldThrowExceptionIfBookingHasStartedOrEnded() {
+        Room room = mock(Room.class);
+        Booking booking = mock(Booking.class);
+
+        when(room.hasBooking("booking1")).thenReturn(true);
+        when(room.getBooking("booking1")).thenReturn(booking);
+        when(roomRepository.findAll()).thenReturn(List.of(room));
+        when(timeProvider.getCurrentTime()).thenReturn(now);
+        when(booking.getStartTime()).thenReturn(now.minusHours(1));
+
+        assertThatThrownBy(() -> bookingSystem.cancelBooking("booking1"))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Kan inte avboka påbörjad eller avslutad bokning");
+    }
 
 }
