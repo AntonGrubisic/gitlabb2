@@ -45,4 +45,21 @@ class BookingSystemTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Kan inte boka tid i dåtid");
     }
+
+    @Test
+    void shouldThrowExceptionIfBookingIsInTheFuture() {
+         LocalDateTime startTime = LocalDateTime.now();
+         LocalDateTime endTime = startTime.minusHours(1);
+
+        when(timeProvider.getCurrentTime()).thenReturn(startTime);
+
+        assertThatThrownBy(() -> bookingSystem.bookRoom("room1", startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Sluttid måste vara efter starttid");
+    }
+
+
+
+
+
 }
