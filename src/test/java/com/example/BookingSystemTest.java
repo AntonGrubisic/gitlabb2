@@ -109,6 +109,23 @@ class BookingSystemTest {
     }
 
     @Test
+    void shouldThrowExceptionIfStartTimeOrEndTimeIsNull() {
+        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(null, now.plusHours(1)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Måste ange både start- och sluttid");
+
+        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(now, null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Måste ange både start- och sluttid");
+    }
+    @Test
+    void shouldThrowExceptionIfEndTimeIsBeforeStartTime() {
+        assertThatThrownBy(() -> bookingSystem.getAvailableRooms(now.plusHours(2), now))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Sluttid måste vara efter starttid");
+    }
+
+    @Test
     void shouldThrowExceptionIfBookingIdIsNull() {
         assertThatThrownBy(() -> bookingSystem.cancelBooking(null))
                 .isInstanceOf(IllegalArgumentException.class)
