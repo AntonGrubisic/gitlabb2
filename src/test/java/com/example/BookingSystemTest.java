@@ -6,8 +6,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
-
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -21,7 +21,7 @@ class BookingSystemTest {
     private NotificationService notificationService;
     private BookingSystem bookingSystem;
     private LocalDateTime now;
-    private Room testRoom;
+
 
     @BeforeEach
     void setUp() {
@@ -132,4 +132,16 @@ class BookingSystemTest {
                 .hasMessage("Boknings-id kan inte vara null");
 
     }
+    @Test
+    void shouldReturnAvailableRooms() {
+        Room availableRoom = mock(Room.class);
+        when(availableRoom.isAvailable(any(), any())).thenReturn(true);
+        when(roomRepository.findAll()).thenReturn(List.of(availableRoom));
+
+        List<Room> result = bookingSystem.getAvailableRooms(now, now.plusHours(1));
+
+        assertEquals(1, result.size());
+        assertEquals(availableRoom, result.get(0));
+    }
+
 }
