@@ -166,5 +166,25 @@ class BookingSystemTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Kan inte avboka påbörjad eller avslutad bokning");
     }
+    @Test
+    void shouldCancelBookingSuccessfully() throws NotificationException {
+        Room room = mock(Room.class);
+        Booking booking = mock(Booking.class);
+
+        when(room.hasBooking("booking1")).thenReturn(true);
+        when(room.getBooking("booking1")).thenReturn(booking);
+        when(roomRepository.findAll()).thenReturn(List.of(room));
+        when(timeProvider.getCurrentTime()).thenReturn(now);
+        when(booking.getStartTime()).thenReturn(now.plusHours(1));
+
+        boolean result = bookingSystem.cancelBooking("booking1");
+
+        assertTrue(result);
+        verify(room).removeBooking("booking1");
+        verify(roomRepository).save(room);
+
+        doThrow(new NotificationException("Notifiering misslyckades"))
+                .when(notificationService).sendCancellationConfirmation(any());
+    }
 
 }
