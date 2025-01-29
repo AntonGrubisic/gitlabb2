@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +20,8 @@ class BookingSystemTest {
     private RoomRepository roomRepository;
     private NotificationService notificationService;
     private BookingSystem bookingSystem;
+    private LocalDateTime now;
+    private Room testRoom;
 
     @BeforeEach
     void setUp() {
@@ -26,6 +29,12 @@ class BookingSystemTest {
         roomRepository = mock(RoomRepository.class);
         notificationService = mock(NotificationService.class);
         bookingSystem = new BookingSystem(timeProvider, roomRepository, notificationService);
+        now = LocalDateTime.now();
+
+        Room testRoom = mock(Room.class);
+        when(roomRepository.findById("room1")).thenReturn(java.util.Optional.of(testRoom));
+        when(testRoom.isAvailable(any(), any())).thenReturn(true);
+
     }
 
     @ParameterizedTest
@@ -68,8 +77,20 @@ class BookingSystemTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Rummet existerar inte");
     }
+    @Test
+    void shouldReturnFalseIfRoomIsNotAvailable() {
+        LocalDateTime startTime = now.plusDays(1);
+        LocalDateTime endTime = startTime.plusHours(2);
 
+        when(timeProvider.getCurrentTime()).thenReturn(now);
 
+        Room testRoom = mock(Room.class);
+        when(roomRepository.findById("room1")).thenReturn(Optional.of(testRoom));
+        when(testRoom.isAvailable(startTime, endTime)).thenReturn(false);
+
+        boolean result = bookingSystem.bookRoom("room1", startTime, endTime);
+        assertFalse(result);
+    }
 
 
 
