@@ -57,6 +57,17 @@ class BookingSystemTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Sluttid måste vara efter starttid");
     }
+    @Test
+    void shouldThrowExceptionIfRoomDoesNotExist() {
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusHours(1);
+
+        when(timeProvider.getCurrentTime()).thenReturn(startTime);
+
+        assertThatThrownBy(() -> bookingSystem.bookRoom("nonExistentRoom", startTime, endTime))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Rummet existerar inte");
+    }
 
 
 
