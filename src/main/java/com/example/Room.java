@@ -9,9 +9,9 @@ public class Room {
     private final String name;
     private final Set<Booking> bookings = new HashSet<>();
 
-    public Room(String id, String name) {
+    public Room(String id) {
         this.id = id;
-        this.name = name;
+        this.name = "standardrum";
     }
 
     public boolean isAvailable(LocalDateTime startTime, LocalDateTime endTime) {

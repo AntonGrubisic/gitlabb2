@@ -91,6 +91,22 @@ class BookingSystemTest {
         boolean result = bookingSystem.bookRoom("room1", startTime, endTime);
         assertFalse(result);
     }
+    @Test
+    void shouldNotFailIfNotificationFails() throws NotificationException {
+        LocalDateTime startTime = now.plusDays(1);
+        LocalDateTime endTime = startTime.plusHours(2);
+
+        when(timeProvider.getCurrentTime()).thenReturn(now);
+
+        Room testRoom = mock(Room.class);
+        when(roomRepository.findById("room1")).thenReturn(Optional.of(testRoom));
+        when(testRoom.isAvailable(startTime, endTime)).thenReturn(true);
+
+        doThrow(new NotificationException("Notifiering misslyckades")).when(notificationService).sendBookingConfirmation(any());
+
+        boolean result = bookingSystem.bookRoom("room1", startTime, endTime);
+        assertTrue(result);
+    }
 
 
 
