@@ -29,6 +29,11 @@ public class ShoppingCart {
         }
         return total * (1 - discount);
     }
+    public void applyDiscount(double discount) {
+        if (discount >= 0.0 && discount <= 1.0) {
+            this.discount = discount;
+        }
+    }
 
     public int getItemCount() {
         return items.size();
