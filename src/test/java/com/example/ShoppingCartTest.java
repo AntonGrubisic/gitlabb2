@@ -19,5 +19,12 @@ class ShoppingCartTest {
         assertEquals(1, shoppingCart.getItemCount());
     }
 
+    @Test
+    void removeAnItemFromTheShoppingCart() {
+        shoppingCart.addItem(new Item("Orange", 1, 2));
+        shoppingCart.removeItem("Orange");
+        assertEquals(0, shoppingCart.getItemCount());
+    }
+
 
 }
