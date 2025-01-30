@@ -5,7 +5,11 @@ import java.util.List;
 
 public class ShoppingCart {
     private List<CartItems> items;
-    public ShoppingCart() {
-        items = new ArrayList<>();
+    private double discount = 0.0;
+
+    public void addItem(CartItems item) {
+        items.add(item);
     }
+
+
 }
