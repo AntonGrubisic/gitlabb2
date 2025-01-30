@@ -39,7 +39,7 @@ class ShoppingCartTest {
     }
     @Test
     void updateQuantityOfAnItemInTheShoppingCart() {
-        shoppingCart.addItem(new Item("Peach", 3, 3.4));
+        shoppingCart.addItem(new Item("Peach", 1, 2));
         shoppingCart.updateQuantity("Peach", 5);
         assertEquals(10.0, shoppingCart.calculateTotalPrice());
     }

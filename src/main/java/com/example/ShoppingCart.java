@@ -34,6 +34,13 @@ public class ShoppingCart {
             this.discount = discount;
         }
     }
+    public void updateQuantity(String itemName, int newQuantity) {
+        for (Item item : items) {
+            if (item.getItemName().equals(itemName) && newQuantity >= 0) {
+                item.setQuantity(newQuantity);
+            }
+        }
+    }
 
     public int getItemCount() {
         return items.size();
