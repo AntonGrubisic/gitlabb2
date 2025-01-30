@@ -25,6 +25,11 @@ class ShoppingCartTest {
         shoppingCart.removeItem("Orange");
         assertEquals(0, shoppingCart.getItemCount());
     }
-
+    @Test
+    void calculateTotalPriceOfTheItemsInTheShoppingCart() {
+        shoppingCart.addItem(new Item("Banana", 2, 3));
+        shoppingCart.addItem(new Item("Grapes", 3, 2));
+        assertEquals(12.0, shoppingCart.calculateTotalPrice());
+    }
 
 }
