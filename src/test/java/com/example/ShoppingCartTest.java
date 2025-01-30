@@ -37,5 +37,10 @@ class ShoppingCartTest {
         shoppingCart.applyDiscount(0.1);
         assertEquals(9.0, shoppingCart.calculateTotalPrice());
     }
-
+    @Test
+    void updateQuantityOfAnItemInTheShoppingCart() {
+        shoppingCart.addItem(new Item("Peach", 3, 3.4));
+        shoppingCart.updateQuantity("Peach", 5);
+        assertEquals(10.0, shoppingCart.calculateTotalPrice());
+    }
 }
