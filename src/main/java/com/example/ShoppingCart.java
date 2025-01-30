@@ -12,7 +12,9 @@ public class ShoppingCart {
     }
 
     public void addItem(Item item) {
-        items.add(item);
+        if (item.getQuantity() > 0) {
+            items.add(item);
+        }
     }
 
     public void removeItem(String itemName) {
