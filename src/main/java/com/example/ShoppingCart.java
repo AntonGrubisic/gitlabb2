@@ -5,10 +5,11 @@ import java.util.List;
 
 public class ShoppingCart {
     private final List<Item> items;
+    double discount = 0.0;
 
     public ShoppingCart() {
         items = new ArrayList<Item>();
-        double discount = 0.0;
+
     }
 
     public void addItem(Item item) {
@@ -17,10 +18,17 @@ public class ShoppingCart {
         }
     }
 
+
     public void removeItem(String itemName) {
         items.removeIf(item -> item.getItemName().equals(itemName));
     }
-
+    public double calculateTotalPrice() {
+        double total = 0.0;
+        for (Item item : items) {
+            total += item.getPrice() * item.getQuantity();
+        }
+        return total * (1 - discount);
+    }
 
     public int getItemCount() {
         return items.size();
