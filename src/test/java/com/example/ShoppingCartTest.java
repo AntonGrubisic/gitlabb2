@@ -31,5 +31,11 @@ class ShoppingCartTest {
         shoppingCart.addItem(new Item("Grapes", 3, 2));
         assertEquals(12.0, shoppingCart.calculateTotalPrice());
     }
+    @Test
+    void applyDiscountOnAnItem() {
+        shoppingCart.addItem(new Item("Mango", 5, 2.0));
+        shoppingCart.applyDiscount(0.1);
+        assertEquals(9.0, shoppingCart.calculateTotalPrice());
+    }
 
 }
