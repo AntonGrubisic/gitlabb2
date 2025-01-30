@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingCart {
-    private List<CartItems> items;
-    private double discount = 0.0;
+    private final List<Item> items;
 
-    public void addItem(CartItems item) {
+    public ShoppingCart() {
+        items = new ArrayList<Item>();
+        double discount = 0.0;
+    }
+
+    public void addItem(Item item) {
         items.add(item);
     }
 
-
+    public int getItemCount() {
+        return items.size();
+    }
 }

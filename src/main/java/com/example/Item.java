@@ -1,18 +1,18 @@
 package com.example;
 
-public class CartItems {
-    private final String itemName;
+public class Item {
+    private  String name;
     private int quantity;
     private double price;
 
-    public CartItems(String itemName, int quantity, double price) {
-        this.itemName = itemName;
+    public Item(String name, int quantity, double price) {
+        this.name = name;
         this.quantity = quantity;
         this.price = price;
     }
 
     public String getItemName() {
-        return itemName;
+        return name;
     }
 
     public int getQuantity() {
