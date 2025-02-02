@@ -33,5 +33,12 @@ class PaymentProcessorTest {
         verify(databaseConnectionMock).executeUpdate("INSERT INTO payments (amount, status) VALUES (100.0, 'SUCCESS')");
         verify(emailServiceMock).sendPaymentConfirmation("user@example.com", 100.0);
     }
-
+    @Test
+    public void testProcessPaymentIfItFails() {
+        when(paymentApiMock.charge(anyString(), anyDouble())).thenReturn(new PaymentApiResponse(false));
+        boolean result = paymentProcessor.processPayment(100.0);
+        assertFalse(result, "Payment should fail");
+        verify(databaseConnectionMock).executeUpdate("INSERT INTO payments (amount, status) VALUES (100.0, 'FAILED')");
+        verify(emailServiceMock, never()).sendPaymentConfirmation(anyString(), anyDouble());
+    }
 }
